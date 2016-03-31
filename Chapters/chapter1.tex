@@ -1,0 +1,14 @@
+\chapter{Introduction}
+
+\section{Overview and Motivation}
+A system that can automatically describe the content of natural images in natural sentences (e.g., English sentence) has many practical applications. For instance, such a system can be instrumental in helping visually impaired users navigate in different environments, such as in supermarket or in a crowded road with many transportation vehicles as well as other pedestrians. Moreover, textual descriptions can provide a rich source of information from underlying image, which can be an excellent means of visual and semantic information for image search engines. Being able to generate descriptions for images, a search engine can analyse and process query mainly based on the descriptions and return the results in much shorter amount of time.
+
+At the same time, however, generating image descriptions poses many challenges as it not only requires the system to understand visual representation of the input image, the system also has to ``translate'' such representation into sequence of words that describes the image. A large body of work has been continously conducted on this problem and many different approaches have been proposed and evaluated with different criteria and by different metrics.
+
+...
+
+In this thesis, I describe an approach to this problem of generating image description based on recent advances in deep learning, specifically in computer vision and machine translation. Intuitively, the model presented in this thesis is comprised of a Convolutional Neural Network (CNN) and a Long-Short Term Memory (LSTM) - the well-known variant of recurrent neural network. The CNN acts as an image encoder which ``encodes'' input image into a fixed-length vector representation. This vector is then fed into a LSTM module which ``decodes'' that representation into sequence of words.
+
+\section{Related Work}
+
+\section{Contributions and Outline of This Thesis}

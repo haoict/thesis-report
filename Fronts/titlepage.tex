@@ -1,0 +1,65 @@
+%% ================== TITLE PAGE ================== %%
+% \makeatletter
+% \def \maketitle {%
+\begin{titlepage}
+% Page border
+\begin{tikzpicture}[remember picture, overlay]
+	\draw[line width = 1pt] ($(current page.north west) + (35mm,-20mm)$) rectangle ($(current page.south east) + (-20mm,20mm)$);
+\end{tikzpicture}
+	\thispagestyle{empty}
+	\vspace{-20pt}
+	\begin{center}
+		\fontsize{14}{16}\selectfont
+		\MakeUppercase{\universityTitle}\\
+		\MakeUppercase{\schoolName}\\
+		-------------------*------------------- \\
+		\vspace{100pt}
+
+		\fontsize{26}{28}\selectfont
+		\MakeUppercase{\textbf{Thesis}}\\
+		\vspace{10pt}
+		\fontsize{14}{16}\selectfont
+		\MakeUppercase{Submitted for partial fulfillment of}\\
+		\MakeUppercase{the requirements for the degree of}\\
+		
+		\vspace{4pt}
+
+		\fontsize{26}{28}\selectfont
+		\MakeUppercase{\textbf{Engineer}}\\
+		\vspace{10pt}
+		\fontsize{14}{16}\selectfont
+		\MakeUppercase{IN}\\
+		\vspace{10pt}
+
+		\fontsize{22}{24}\selectfont
+		\MakeUppercase{\textbf{Information Technology}}\\
+
+		\vspace{40pt}
+
+		\begin{minipage}{0.96\linewidth}
+			\begin{center}
+			\fontsize{22}{22}\selectfont
+			\MakeUppercase{\textbf{\thesisTitle}}\\
+			\end{center}
+		\end{minipage}
+
+		\vspace{40pt}
+
+		\raggedleft
+		\begin{minipage}{0.6\linewidth}
+			\fontsize{14}{16pt}\selectfont
+			\begin{tabular}{ l c l }
+			Author & : & \textbf{\thesisAuthor}\\
+					& & Class \studentClass\\
+			Supervisor & : & \textbf{\supervisor} \\
+			Co-supervisor & : & \textbf{\cosupervisor}
+			\end{tabular}
+		\end{minipage}
+		\vfill
+		\centering
+		\fontsize{16}{16pt}\selectfont
+		\MakeUppercase{Hanoi, 05 -- 2016}
+	\end{center}
+	\cleardoublepage
+% \makeatother
+\end{titlepage}

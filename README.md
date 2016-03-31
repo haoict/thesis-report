@@ -1,7 +1,9 @@
 # Thesis Report
 ## Title: ImageCap: An Image Caption Generator using Deep Convolutional Neural Network and Long-Short Term Memory
 Author: Duc-Cuong Dao
+
 School of Information and Communication Technology
+
 Hanoi University of Science and Technology
 
 --------------------------------------------

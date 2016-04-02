@@ -4,7 +4,7 @@
 \usepackage[a4paper,top=25mm,right=20mm,bottom=25mm,left=35mm]{geometry}
 
 \usepackage{amsmath,amssymb, amsthm, pgfplots} % Math packages
-\usepackage[none]{hyphenat} % prevent auto hyphenation
+% \usepackage[none]{hyphenat} % prevent auto hyphenation
 %% ================== HEADER AND FOOTER ================== %%
 %%														   %%
 %% ======================================================= %%
@@ -43,8 +43,11 @@
 
 % Vietnamese input
 \usepackage[utf8]{inputenc}
-\usepackage[english]{babel}
-% \selectlanguage{english}
+\usepackage[vietnam,english]{babel}
+\selectlanguage{english}
+
+%% Appendix
+\usepackage[titletoc]{appendix}% http://ctan.org/pkg/appendices
 
 %% Continuous figure numbering
 \usepackage{chngcntr} 
@@ -56,6 +59,10 @@
 
 \usepackage{tikz}
 \usetikzlibrary{calc}
+
+% Draw box around important equations
+\usepackage{tcolorbox}
+\definecolor{bordeuxcolor}{RGB}{128, 0, 0}
 
 %% User-defined commands
 \input{\PreamblePath/commands}
@@ -118,20 +125,21 @@
 }
 {\vfill\null}
 
-% \newenvironment{vnabstract}
-% {
-% 	\begin{otherlanguage}{vietnam}
-% 		\cleardoublepage
-% 		\thispagestyle{empty}
-% 		\addcontentsline{toc}{chapter}{Tóm tắt nội dung đồ án tốt nghiệp}
-% 		\vspace{-30pt}
-% 		% \null
-% 		\begin{center}
-% 		\fontsize{14}{16pt}\selectfont
-% 		\bfseries \MakeUppercase{Tóm tắt nội dung đồ án tốt nghiệp}
-% 		\end{center}
-% 		\fontsize{12}{14pt}\selectfont
-% 	\end{otherlanguage}
-% }
-% {\vfill\null}
+\newenvironment{vnabstract}
+{
+	\cleardoublepage
+	\thispagestyle{empty}
+	\selectlanguage{vietnam} %% Must be presented here, or you will not be able
+							 %% to use Vietnamese in some pages in your thesis
+	\addcontentsline{toc}{chapter}{Tóm tắt nội dung đồ án tốt nghiệp}
+	\vspace{-30pt}
+	% \null
+	\begin{center}
+	\fontsize{14}{16pt}\selectfont
+	\bfseries \MakeUppercase{Tóm tắt nội dung đồ án tốt nghiệp}
+	\end{center}
+	\selectlanguage{english}
+	\fontsize{12}{14pt}\selectfont
+}
+{\vfill\null}
 %% ================ End ENVIRONMENTS ================ %%

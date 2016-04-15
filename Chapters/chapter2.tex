@@ -108,3 +108,84 @@ and $\displaystyle\frac{\partial E}{\partial y^L_k}$ is assumed to be readily co
 \subsection{Pooling layer}
 
 \section{Recurrent Neural Network}
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{Chapters/Fig/data_preprocessor.eps}
+\end{figure}
+
+
+
+%% -------------------------------------
+%% SECTION 2:
+%%   Evaluation metrics
+%% -------------------------------------
+\section{Evaluation Metrics}
+\label{sec:chap4_metric}
+Even though there has not existed any clear methodology to decide whether a generated caption is deemed successful or not given an input images, researchers of image captioning and machine translation often use several methods to evaluate the quality of the captions. The most commonly used metric so far in the image caption literature has been the BLUE score \cite{Papineni:2002:BMA:1073083.1073135}. Though the metric has recently been critised due to some obvious drawbacks, it has been shown to correlate well with human evaluations. In addition, another scores which are also often used are METEOR and CIDer.
+
+\subsection{BLUE}
+Let \textit{c} be the length of the generated caption and \textit{r} be the length of the groundtruth caption in the dataset. The brevity penalty BP is computed as
+\begin{align}
+	BP &= \left\{
+		\begin{tabular}{l l}
+			1 & if $c > r$ \\
+			$e^{\left(1 - r/c\right)}$ & if $c \leq r$
+		\end{tabular}
+	\right.
+\end{align}
+Then,
+	\begin{align}
+		\centering
+		\text{BLUE} &= \text{BP} \cdot \text{exp} \left( \mathlarger{ \sum^N_{n=1} } w_n \text{log} p_n \right) 
+	\end{align}
+The ranking behavior is more immediately apparent in the log domain
+\begin{align*}
+	\text{log BLUE} &= \text{min} \left(1 - \frac{r}{c}, 0\right) + \mathlarger{\sum^N_{n=1}} w_n\text{log}p_n 
+\end{align*}
+
+
+\subsection{METEOR}
+In the context of image captioning, METEOR \cite{denkowski:lavie:meteor-wmt:2014} is a language specific translation evaluation method for any target language. It evaluates the generated caption by aligning it to the groundtruth sentence and calculating sentence-level similarity scores.
+The METEOR score for a sentence pair is calculated as follow:
+\begin{itemize}
+	\item Content and function words are identified in the hypothesis $\left(h_c, h_f\right)$ and reference $\left(r_c, r_f \right)$ according to a function word list
+
+	\item For each of the matchers $\left( m_i \right)$ count the number of content and function words covered by matches of this type in the hypothesis $\left(m_i\left(h_c\right), m_i\left(h_f\right)\right)$ and reference $\left(m_i\left(r_c\right), m_i\left(r_f\right) \right)$
+
+	\item Calculate weighted precision and recall using matcher weights $\left(w_i .s w_n\right)$ and content-function word weight $\left( \delta \right)$:
+	\begin{align}
+		P &= \frac{\sum_i w_i \cdot \left( \delta \cdot m_i\left(h_c\right) + \left(1 - \delta \right) \cdot m_i \left(h_f\right) \right)}{\delta \cdot |h_c| + \left( 1 - \delta \right) \cdot |h_f|} \\
+		R &= \frac{\sum_i w_i \cdot \left( \delta \cdot m_i\left(r_c\right) + \left(1 - \delta \right) \cdot m_i \left(r_f\right) \right)}{\delta \cdot |r_c| + \left( 1 - \delta \right) \cdot |r_f|}
+	\end{align}
+
+	\item Calculate the harmonic mean of $P$ and $R$:
+	\begin{align}
+		F_{\text{mean}} = \frac{P . R}{\alpha . P + \left( 1 - \alpha \right) . R}
+	\end{align}
+
+	\item To account for gaps and differences in word order, a fragmentation penalty is calculated using the total number of matched word ($m$, averaged over hypothesis and reference) and number of chunks $\left(ch\right)$:
+	\begin{align}
+		\text{Pen} = \gamma . \left( \frac{m}{ch} \right) ^ \beta
+	\end{align}
+
+	\item The METEOR score is then calculated:
+	\begin{align}
+		\centering
+		\text{METEOR} = \left(1 - \text{Pen} \right) . F_{\text{mean}}
+	\end{align}
+\end{itemize}
+
+
+\subsection{CIDEr}
+CIDEr (Consensus-Based Image Description Evaluation) \cite{DBLP:journals/corr/VedantamZP14a} is an novel paradigm for evaluating image captions using humn consensus. It automatically evaluate for image $I_i$ how well a candidate sentence $c_i$ matches the consensus of a set of image descriptions $S_i = \{s_{i1}, \dots, s_{im}\}$. Each sentence is presentation by a set of $n$-grams (typically $n \in \{1, 2, 3, 4\}$).
+
+To calculate CIDEr score, we first have to perform a Term Frequency Inverse Document Frequency (TF-IDF) weighting for each $n$-grams. We compute the TF-IDF weighting $g_k\left(s_{ij}\right)$ for each $n$-gram $\omega_k$ using
+\begin{align}
+	g_k\left(s_{ij}\right) = \frac{h_k\left(s_{ij}\right)}{\sum_{\omega_l \in \Omega} h_l \left(s_{ij}\right)} \log \left( \frac{|I|}{\sum_{I_p \in I} \min \left( 1, \sum_q h_k \left(s_{pq} \right)\right)}  \right)
+\end{align}
+Then, CIDEr score is calculated as:
+	\begin{align}
+		\centering
+		\text{CIDEr} \left( c_i, S_i \right) &= \mathlarger{\sum_{n=1}^N} w_n \text{CIDEr}_n\left( c_i, S_i \right)
+	\end{align}
+In practice, $w_n = 1/N$ where $N = 4$ yields the best results

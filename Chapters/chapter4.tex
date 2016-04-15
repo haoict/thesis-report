@@ -14,88 +14,14 @@ This chapter presents details of the implementations, experiments and evaluation
 
 \subsection{Training and Monitoring}
 Training a deep neural network can be very hard and time-consuming. During the course of training of all models and experiments presented in this thesis, I have followed several guidelines \cite{bottou-tricks-2012} on tips and tricks to effectively train deep neural networks.
+	
 	\subsubsection{Choosing a right learning rate}
 	As shown in \cite{Murata98astatistical}, the mathematics of stochastic gradient descent do not depend on the size of training set. Therefore, the best way to determine the correct learning rates is to perform experiments on a small but representative traing set. When the model performs well on training cost with the sample training set with some learning rate $\gamma_t$, we can apply that learning rate to train our model on real training set.
 
 	For this purpose, I set up a small experiment on subset of MSCOCO dataset (see \ref{sec:dataset_mscoco} for details). The subset COCO-1k consists of images randomly from MSCOCO training set. There are in total $1,200$ images in COCO-1k; $1,000$ of them are in training set and the rest are reserved in the validation set. I trained a model with 16-layer VGGNet as CNN; optimization method is SGD; the LSTM has 512 hidden units and with batch size equals to 5.
-%% -------------------------------------
-%% SECTION 2:
-%%   Evaluation metrics
-%% -------------------------------------
-\section{Evaluation Metrics}
-\label{sec:chap4_metric}
-Even though there has not existed any clear methodology to decide whether a generated caption is deemed successful or not given an input images, researchers of image captioning and machine translation often use several methods to evaluate the quality of the captions. The most commonly used metric so far in the image caption literature has been the BLUE score \cite{Papineni:2002:BMA:1073083.1073135}. Though the metric has recently been critised due to some obvious drawbacks, it has been shown to correlate well with human evaluations. In addition, another scores which are also often used are METEOR and CIDer.
 
-\subsection{BLUE}
-Let \textit{c} be the length of the generated caption and \textit{r} be the length of the groundtruth caption in the dataset. The brevity penalty BP is computed as
-\begin{align}
-	BP &= \left\{
-		\begin{tabular}{l l}
-			1 & if $c > r$ \\
-			$e^{\left(1 - r/c\right)}$ & if $c \leq r$
-		\end{tabular}
-	\right.
-\end{align}
-Then,
-	\begin{tcolorbox}[ams align, colback=yellow!10!white,colframe=bordeuxcolor]
-	% \begin{align}
-		\centering
-		\text{BLUE} &= \text{BP}.\text{exp}\left( \mathlarger{\sum^N_{n=1}}w_n\text{log}p_n\right) 
-	% \end{align}
-	\end{tcolorbox}
-The ranking behavior is more immediately apparent in the log domain
-\begin{align*}
-	\text{log BLUE} &= \text{min} \left(1 - \frac{r}{c}, 0\right) + \mathlarger{\sum^N_{n=1}} w_n\text{log}p_n 
-\end{align*}
-
-
-\subsection{METEOR}
-In the context of image captioning, METEOR \cite{denkowski:lavie:meteor-wmt:2014} is a language specific translation evaluation method for any target language. It evaluates the generated caption by aligning it to the groundtruth sentence and calculating sentence-level similarity scores.
-The METEOR score for a sentence pair is calculated as follow:
-\begin{itemize}
-	\item Content and function words are identified in the hypothesis $\left(h_c, h_f\right)$ and reference $\left(r_c, r_f \right)$ according to a function word list
-
-	\item For each of the matchers $\left( m_i \right)$ count the number of content and function words covered by matches of this type in the hypothesis $\left(m_i\left(h_c\right), m_i\left(h_f\right)\right)$ and reference $\left(m_i\left(r_c\right), m_i\left(r_f\right) \right)$
-
-	\item Calculate weighted precision and recall using matcher weights $\left(w_i .s w_n\right)$ and content-function word weight $\left( \delta \right)$:
-	\begin{align}
-		P &= \frac{\sum_i w_i \cdot \left( \delta \cdot m_i\left(h_c\right) + \left(1 - \delta \right) \cdot m_i \left(h_f\right) \right)}{\delta \cdot |h_c| + \left( 1 - \delta \right) \cdot |h_f|} \\
-		R &= \frac{\sum_i w_i \cdot \left( \delta \cdot m_i\left(r_c\right) + \left(1 - \delta \right) \cdot m_i \left(r_f\right) \right)}{\delta \cdot |r_c| + \left( 1 - \delta \right) \cdot |r_f|}
-	\end{align}
-
-	\item Calculate the harmonic mean of $P$ and $R$:
-	\begin{align}
-		F_{\text{mean}} = \frac{P . R}{\alpha . P + \left( 1 - \alpha \right) . R}
-	\end{align}
-
-	\item To account for gaps and differences in word order, a fragmentation penalty is calculated using the total number of matched word ($m$, averaged over hypothesis and reference) and number of chunks $\left(ch\right)$:
-	\begin{align}
-		\text{Pen} = \gamma . \left( \frac{m}{ch} \right) ^ \beta
-	\end{align}
-
-	\item The METEOR score is then calculated:
-	\begin{tcolorbox}[ams align, colback=yellow!10!white,colframe=bordeuxcolor]
-	% \begin{align}
-		\centering
-		\text{METEOR} = \left(1 - \text{Pen} \right) . F_{\text{mean}}
-	% \end{align}
-	\end{tcolorbox}
-\end{itemize}
-
-
-\subsection{CIDEr}
-CIDEr (Consensus-Based Image Description Evaluation) \cite{DBLP:journals/corr/VedantamZP14a} is an novel paradigm for evaluating image captions using humn consensus. It automatically evaluate for image $I_i$ how well a candidate sentence $c_i$ matches the consensus of a set of image descriptions $S_i = \{s_{i1}, \dots, s_{im}\}$. Each sentence is presentation by a set of $n$-grams (typically $n \in \{1, 2, 3, 4\}$).
-
-To calculate CIDEr score, we first have to perform a Term Frequency Inverse Document Frequency (TF-IDF) weighting for each $n$-grams. We compute the TF-IDF weighting $g_k\left(s_{ij}\right)$ for each $n$-gram $\omega_k$ using
-\begin{align}
-	g_k\left(s_{ij}\right) = \frac{h_k\left(s_{ij}\right)}{\sum_{\omega_l \in \Omega} h_l \left(s_{ij}\right)} \log \left( \frac{|I|}{\sum_{I_p \in I} \min \left( 1, \sum_q h_k \left(s_{pq} \right)\right)}  \right)
-\end{align}
-Then, CIDEr score is calculated as:
-\begin{tcolorbox}[ams align, colback=yellow!10!white,colframe=bordeuxcolor]
-	\centering
-	\text{CIDEr}\left(c_i, S_i\right) &= \mathlarger{\sum_{n=1}^N} w_n \text{CIDEr}_n\left(c_i, S_i\right)
-\end{tcolorbox}
-In practice, $w_n = 1/N$ where $N = 4$ yields the best results
+	\subsubsection{Monitoring the training process}
+	\label{sec:monitoring}
 
 %% -------------------------------------
 %% SECTION 3:
@@ -105,19 +31,27 @@ In practice, $w_n = 1/N$ where $N = 4$ yields the best results
 \label{sec:chap4_environment}
 
 \subsection{Hardware configurations}
-All models are trained with the following hardware configurations:
+\label{sec:hardware}
+All models are trained with the hardware configurations as shown in table \ref{tab:hardware_configuration}:
 
 \begin{table}
 	\centering
+	\caption{Hardware configuration for training all models}	
 	\label{tab:hardware_configuration}
-	\caption{Hardware configuration for training all models}
-	\begin{tabular}{|l|l|}
-		\hline
-		CPU & Intel(R) Xeon(R) E5-2620 (15MB cache, 2.40GHz) \\ \hline
-		Memory & 128 GB \\ \hline
-		GPU & 2 x nVidia Tesla K80 [GK210B], each with $2,496$ CUDA cores, $12$GB VRAM, 240 GB/s memory bandwidth \\ \hline
-		Storage & 4TB \\ \hline
-	\end{tabular}
+	\begin{tabularx}{0.65\textwidth}{ll}
+		\toprule
+		CPU & 2 x Intel(R) Xeon(R) E5-2620v3 \\
+			& (6 cores, 15MB cache, 2.40GHz) \\
+		\midrule
+		Memory & 4 x 32 GB ECC Registered \\
+		\midrule 
+		GPU & 2 x nVidia Tesla K80 [GK210B], \\
+			& each with $2,496$ CUDA cores, \\
+			& $12$GB VRAM, 240 GB/s memory bandwidth \\
+		\midrule
+		Storage & 8 x 6TB SATA 7200RPM Enterprise \\
+		\bottomrule
+	\end{tabularx}
 \end{table}
 
 \subsection{Datasets}
@@ -189,7 +123,7 @@ The statistics of the datasets are summarized in table \ref{tab:dataset-statisti
 \begin{table}
 	\centering
 	\label{tab:dataset-statistics}
-	\begin{tabular}{l|c|c|c}
+	\begin{tabular}{lccc}
 		\toprule
 		\multirow{2}{*}{Dataset name} & \multicolumn{3}{c}{size} \\ \cline{2-4}
 		& train & validation & test \\ \midrule
@@ -209,4 +143,114 @@ The statistics of the datasets are summarized in table \ref{tab:dataset-statisti
 \section{Experiments and Evaluations}
 \label{sec:chap4_experiment}
 
-\subsection{Experiment 1: The effects of different optimization methods}
+This section gives the details of all experiments that I have conducted to explore and evaluate different models as well as the effects of different hyperparameters to the models proposed in previous chapter. 
+
+\textit{// TODO: Refactor the name of experiments}
+% \subsection{Experiment 1: Determine the right learning rates}
+
+\subsection{Experiment 1: LSTM hidden sizes}
+\subsubsection{Experimental setup}
+\gls{sgd} have been extensively employed to train deep neural networks due to their ease in implementation and robustness for problems with a lot of training samples. This experiment examines the effects of different LSTM hidden sizes with respect to the training process as well as overall performance of the models.
+
+Emperically, in order to get good performance with \gls{sgd}, one needs to manually adjust the initial value of learning rate (step size) for each model and each problem, as well as design a suitable schedule to update that step size if necessary. Recent researches on \gls{sgd} focuses on adaptive strategies (i.e., to adjust the learning rate according to the behavior of the objective function) for learning rate. Among those methods RMSProp \footnote{an unpublished work by Geoffrey Hinton. Slide 26, lecture 6a of course Neural Networks for Machine Leanring. \url{http://www.cs.toronto.edu/~tijmen/csc321/slides/lecture_slides_lec6.pdf}} and Adam \cite{DBLP:journals/corr/KingmaB14} have been increasingly used for training deep learning models. The opitmization parameters associated with pure SGDs is: $\eta$; for RMSProp are $\eta, \alpha, \epsilon$ and for Adam are $\eta, \alpha, \beta, \epsilon$.
+
+I pratically found that, for the proposed image captioning model, the following settings for LSTM hidden sizes work relatively well:
+	\begin{itemize}
+		\item \textbf{SGD}: learning rate $\eta = 1\mathrm{e}{-2}$, no momentum, no weight decay
+		\item \textbf{RMSProp}: learning rate $\eta = 5\mathrm{e}{-4}$; $\alpha = 0.8, \epsilon = 1\mathrm{e}{-8}$
+		\item \textbf{Adam}: learning rate $\eta = 5\math{e}{-4}$; $\alpha = 0.8, \beta = 0.999, \epsilon = 1\math{e}{-8}$
+	\end{itemize}
+
+There are two configurations in this experiment. The first one - namely Config-1 - utilises a 16-layer VGGNet as its image feature extractor while the second one - namely Config-2 uses the AlexNet as its CNN. All CNNs were pretrained on ImageNet dataset using Caffe framework \cite{jia2014caffe} \footnote{The pretrained models can be obtained at \url{https://github.com/BVLC/caffe/wiki/Model-Zoo}}. For all configurations, the batch size is $16$
+
+\subsubsection{Experimental results and evaluations}
+	\begin{figure}[ht]
+		\centering
+		\subfigure[Config-1: VGG-16 as CNN, LSTM with $512$ hidden units]{
+			\includegraphics[width=0.48\linewidth]{Chapters/Fig/vgg_optims.eps}
+			\hfill
+			\includegraphics[width=0.48\linewidth]{Chapters/Fig/vgg_lang_stat.eps}
+		}
+		\subfigure[Config-2: AlexNet as CNN, LSTM with $512$ hidden units]{
+			\includegraphics[width=0.48\linewidth]{Chapters/Fig/alex_optims.eps}
+			\hfill
+			\includegraphics[width=0.48\linewidth]{Chapters/Fig/alex_lang_stat.eps}
+		}
+		\caption[Comparison of $3$ opitmization methods ]{Comparison of $3$ optimization methods: SGD, RMSProp and Adam w.r.t training/validation losses and language evaluation score during the first $50,000$ training iterations}
+		\label{fig:exp1} % label should be placed immediately after \caption for cross-reference to work properly
+	\end{figure}
+
+The train and validation losses as well as language evaluation scores during the first $50,000$ iterations for each configuration are shown in \ref{fig:exp1}. 
+
+As can be inferred from figure \ref{fig:exp1}, regardless of the \gls{cnn}, Adam optimizer gives the fastest convergence rate; pure \gls{sgd} without momentum and weight decay gives the lowest convergence rate compared the other LSTM hidden sizes. In addition, the losses reach a ``plateau'' (approximately $2.5$) very quickly after about first $20,000$ iterations, which indicates that the chose learning rate is considerably good enough for this problem.  
+
+Regarding the language evaluation scores on standard metrics, both Adam and RMSProp achieves superior results to SGD, with Adam performs slightly better. The BLEU-1 and METEOR scores for SGD is fluctuated, which reflects its lower convergence rate compared to Adam and RMSProp.
+
+Following the monitoring stragies presented in section \ref{sec:monitoring}, I kept training and monitoring the behavoirs of the models with different settings. The training was terminated if the gradient is exploded (which did not happen for all experiments shown in this thesis) or when the CIDEr score was not improved after $50,000$ consecutive iterations to prevent overfitting. 
+
+On hardware environment mentioned in section \ref{sec:hardware}:
+\begin{itemize}
+	\item Config-1
+	\begin{itemize}
+		\item \textit{Adam optimizer}: takes approximately $20$ hours to train and achieves the best results at iteration $94,000$-th. 
+		\item \textit{RMSProp optimizer}: training time is $29,4$ hours and achieves the best results at iteration $138,000$-th.
+		\item \textit{SGD optimizer}: training finished after $38,2$ hours and achieves the best results at iteration $272,000$-th
+	\end{itemize}
+	\item Config-2
+	\begin{itemize}
+		\item \textit{Adam optimizer}: takes approximately $23$ hours to train and achieves the best results at iteration $146,500$-th. 
+		\item \textit{RMSProp optimizer}: training time is $30,3$ hours and achieves the best results at iteration $191,000$-th.
+		\item \textit{SGD optimizer}: training finished after $42,5$ hours and achienves the best results at iteration $189,000$-th
+	\end{itemize}
+\end{hardware}
+
+The BLEU, METEOR and CIDEr scores for this experiment are reported in Table \ref{tab:exp1_coco_score}
+
+\renewcommand{\arraystretch}{1.2}
+
+\begin{table}
+	\centering
+	\begin{tabular}{llcccccc}
+		\toprule
+		Configuration & Optimizer & B-1 & B-2 & B-3 & B-4 & METEOR & CIDEr \\ \midrule
+		\multirow{3}{*}{\textit{Config-1}} & Adam & \textbf{62.9} & & & & 21.2 & \textbf{65.5} \\
+		 & RMSProp & 61.8 & & & & 19.7 & 62.4 \\
+		 & SGD & 55.5 & & & & 15.5 & 32.3 \\
+		 \midrule
+		 \multirow{3}{*}{\textit{Config-2}} & Adam & 61.5 & & & &\textbf{21.5} & 63.7 \\
+		 & RMSProp & 60.2 & & & & 18.9 & 61.2 \\
+		 & SGD & 53.1 & & & & 14.0 & 30.8 \\
+		 \bottomrule
+	\end{tabular}
+	\caption{Scores on the MSCOCO development set}
+	\label{tab:exp1_coco_score}
+\end{table}
+
+\textbf{Conclusion:} With both VGGNet and AlexNet as the CNN module of the model, Adam $\left( \eta = 5\mathrm{e}{-4}$; $\alpha = 0.8, \beta = 0.999, \epsilon = 1\mathrm{e}{-8} \right) $ gives the best results in terms of the model convergence rate. Hence, it will be used as the optimization method in the subsequent experiments.
+
+\subsection{Experiment 2: LSTM hidden size}
+\subsubsection{Experimental setup}
+As studied in \cite{DBLP:journals/corr/GreffSKSS15}, beside the learning rate $\eta$, the hidden layer size $h$ is an important hyperparameter that affects the performance of \gls{lstm} network. As expected, larger networks perform better,
+however the required training time and the number of network's parameters are also considerably increased. As a result, the model might not be usable when it is deployed to different machines at the inference time even though inference is just forwarding the inputs to the model.
+
+This experiment is conducted to evaluate the effects of different hidden sizes $h$ to the captioning model so as to figure out a suitable one as a trade-off between the performance of the model and the required training time as well as the computational capability of machine used in inference phase.
+To this end, I consider three different values of $h$ that are largely used in researches of \gls{lstm}. %, specifically $h = \left\{ 256, 512, 1000\right\}$. 
+The learning rate is set to $\eta = 5\mathrm{e}{-4}$, and the optimization method is Adam.
+
+\subsubsection{Experimental results and evaluations}
+\begin{figure}[ht]
+	\subfigure[VGGNet as CNN; Adam optimizer]{
+		\includegraphics[width=0.48\linewidth]{Chapters/Fig/vgg_hiddens.eps}
+		\hfill
+		\includegraphics[width=0.48\linewidth]{Chapters/Fig/vgg_hidden_lang_stat.eps}
+	}
+	\subfigure[AlexNet as CNN; Adam optimizer]{
+		\includegraphics[width=0.48\linewidth]{Chapters/Fig/alex_hiddens.eps}
+		\hfill
+		\includegraphics[width=0.48\linewidth]{Chapters/Fig/alex_hidden_lang_stat.eps}
+	}
+	\caption[Comparison of $3$ LSTM hidden sizes]{Comparison of $3$ LSTM hidden sizes: $h \in \left\{ 256, 512, 1000 \right\}$ w.r.t training/validation losses and language evaluation score during the first $50,000$ training iterations}
+	\label{fig:exp2} % label should be placed immediately after \caption for cross-reference to work properly
+\end{figure}
+\subsection{Experiment 4: AlexNet vs VGGNet as visual feature extractor}
+

@@ -29,11 +29,14 @@
 
 \usepackage{graphicx}
 
-% \usepackage{tabularx}
+\usepackage{tabularx}
 \usepackage{booktabs}
 % \usepackage[usenames, dvipsnames]{color}
 \usepackage{wrapfig} % For positioning figure
+
+% For subfigures
 \usepackage{subfigure}
+\usepackage{caption}
 
 \usepackage{times}
 \usepackage{lipsum} % For dummy lorem ipsum texts
@@ -75,7 +78,6 @@
 % \usepackage[Lenny]{fncychap}
 % \renewcommand{\chaptername}{CHAPTER}
 % \renewcommand{\thechapter}{\Roman{chapter}}
-
 
 %% ================ End CHAPTER ================ %%
 
@@ -143,3 +145,7 @@
 }
 {\vfill\null}
 %% ================ End ENVIRONMENTS ================ %%
+
+\usepackage{glossaries} % should be loaded at the end (or at least after
+% packages: hyperref, babel, inputenc)
+\loadglsentries{\PreamblePath/glossaries}

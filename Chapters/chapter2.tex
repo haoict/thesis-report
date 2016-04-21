@@ -5,18 +5,26 @@
 
 This chapter presents the theoretical backgrounds in deep learning that act as foundation for all the models used in the thesis.
 The first section introduces the concept of artifical neuron (or \textit{neuron}) - building block of modern artifical neural networks - and its learning procedures and algorithms including \textit{stochastic gradient descent} and \textit{backpropagation}. The second section describes the architecture of Convolutional Neural Network (CNN) - the infamous type of network that has achieved astounishing performance on numerous computer vision tasks such as classification, detection, segmentation, etc. Another type of neural network - Recurrent Neural Network (RNN), which is powerful for many tasks in natural language processing domain - is presented in the third section. 
-\section{Artificial Neuron}
+
+There are four elements that are particularly important when considering any model of artificial neural networks:
+\begin{itemize}
+	\item[-] the structure of the nodes,
+	\item[-] the topology of the network,
+	\item[-] the objective function,
+	\item[-] the learning algorithm that is used to find the weights of the network and to minimize the objective function.
+\end{itemize}
+\section{Feed-forward Neural Networks}
+
+\subsection{Models of a neuron}
 
 \begin{wrapfigure}{r}{0.35\linewidth}
 	\vspace{-20pt} % reduce top space of the figure
-	\label{fig:neuron}
 	\centering
 	\includegraphics[scale=0.35]{Chapters/Fig/neuron.eps}
 	\caption{A single artificial neuron}
+	\label{fig:neuron}
 	\vspace{-25pt} % decrease bottom space of the figure
 \end{wrapfigure}
-
-\subsection{Notations and Terminologies}
 
 A neuron is a decisive device which takes several inputs and produces one ouput. Figure \ref{fig:neuron} depicts a neuron which takes three inputs and produces one ouput, where:
 \begin{itemize}[noitemsep]
@@ -57,18 +65,16 @@ There are several types of activation functions often used in deep neural networ
 	\label{fig:activation-function}
 \end{figure}
 
-\subsection{Learning with a single neuron}
-In general Machine Learning, the learning is the process to find out a hypothesis function $h\left(x\right)$ that best fits the test data set. It is often that the form of such function is chosen beforehand (e.g., linear, quadratic, etc.). 
-
-\textit{//TODO: rewrite}
-\section{Feed-forward Neural Network}
+\subsection{Feed-forward Neural Network}
 \begin{figure}
 	\centering
 	\includegraphics[width=0.75\linewidth]{Chapters/Fig/feedforward.eps}
-	\caption{A feed-forward neural network consisted of four layers: 1 input layer, 2 hidden layers and one output layer}
+	\caption[A typical feed-forfward network]{A typical feed-forfward network consisted of four layers: 1 input layer, 2 hidden layers and one output layer}
 	\label{fig:ff-net}
 \end{figure}
-Feed-forward neural networks (or \textit{Fully-connected neural networks}) are comprised of layers of neurons. Every neuron in $l$\textit{th} layer is connected to every neuron in $\left(l+1\right)$\textit{th} layer, but there are no connections between neurons within same layer nor connections between neurons in layer $\left(l+1\right)$ to neurons in layer $l$. Figure \ref{fig:ff-net} illustrates the architecture of a simple feed-forward neural network. There is a real-valued weight. Neuron $k$ in layer $l$ receives as input:
+Feed-forward neural networks (or \textit{Fully-connected neural networks}) are comprised of layers of neurons. Every neuron in $l$\textit{th} layer is connected to every neuron in $\left(l+1\right)$\textit{th} layer, but there are no connections between neurons within same layer nor connections between neurons in layer $\left(l+1\right)$ to neurons in layer $l$. Figure \ref{fig:ff-net} illustrates the architecture of a simple feed-forward neural network. The leftmost layer is the \textit{input layer}; the rightmost one is the \textit{output layer} which contains the output neurons. The ones between input and output layer are called the \textit{hidden layer}.
+
+ There is a real-valued weight. Neuron $k$ in layer $l$ receives as input:
 
 \begin{align*}
 	x^l_k = b^l_k + \sum^{N_{t-1}}_{i=1} w^{l-1}_{ik}y^{l-1}_i
@@ -99,8 +105,6 @@ where
 and $\displaystyle\frac{\partial E}{\partial y^L_k}$ is assumed to be readily computable. From this, derivatives with respect to all the weights and biases can be computed, working down from the top layer. This is know as the backpropagation algorithm. Typically, the gradient is averaged over a whole batch of images, and the the parameters are updated with this \textit{average gradient}. This is know as batch learning.
 
 \section{Convolutional Neural Network}
-\subsection{Overview}
-
 \subsection{Convolutional layer}
 
 \subsection{Nonlinear layer}
@@ -108,12 +112,9 @@ and $\displaystyle\frac{\partial E}{\partial y^L_k}$ is assumed to be readily co
 \subsection{Pooling layer}
 
 \section{Recurrent Neural Network}
+\subsection{Vanilla \gls{rnn}}
 
-\begin{figure}
-	\includegraphics[width=\linewidth]{Chapters/Fig/data_preprocessor.eps}
-\end{figure}
-
-
+\subsection{Long Short-term Memory}
 
 %% -------------------------------------
 %% SECTION 2:

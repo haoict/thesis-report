@@ -148,13 +148,13 @@ This section gives the details of all experiments that I have conducted to explo
 \textit{// TODO: Refactor the name of experiments}
 % \subsection{Experiment 1: Determine the right learning rates}
 
-\subsection{Experiment 1: LSTM hidden sizes}
+\subsection{Experiment 1: Optimization methods}
 \subsubsection{Experimental setup}
 \gls{sgd} have been extensively employed to train deep neural networks due to their ease in implementation and robustness for problems with a lot of training samples. This experiment examines the effects of different LSTM hidden sizes with respect to the training process as well as overall performance of the models.
 
 Emperically, in order to get good performance with \gls{sgd}, one needs to manually adjust the initial value of learning rate (step size) for each model and each problem, as well as design a suitable schedule to update that step size if necessary. Recent researches on \gls{sgd} focuses on adaptive strategies (i.e., to adjust the learning rate according to the behavior of the objective function) for learning rate. Among those methods RMSProp \footnote{an unpublished work by Geoffrey Hinton. Slide 26, lecture 6a of course Neural Networks for Machine Leanring. \url{http://www.cs.toronto.edu/~tijmen/csc321/slides/lecture_slides_lec6.pdf}} and Adam \cite{DBLP:journals/corr/KingmaB14} have been increasingly used for training deep learning models. The opitmization parameters associated with pure SGDs is: $\eta$; for RMSProp are $\eta, \alpha, \epsilon$ and for Adam are $\eta, \alpha, \beta, \epsilon$.
 
-I pratically found that, for the proposed image captioning model, the following settings for LSTM hidden sizes work relatively well:
+I pratically found that, for the proposed image captioning model, the following settings for optimization methods work relatively well:
 	\begin{itemize}
 		\item \textbf{SGD}: learning rate $\eta = 1\mathrm{e}{-2}$, no momentum, no weight decay
 		\item \textbf{RMSProp}: learning rate $\eta = 5\mathrm{e}{-4}$; $\alpha = 0.8, \epsilon = 1\mathrm{e}{-8}$
@@ -182,7 +182,7 @@ There are two configurations in this experiment. The first one - namely Config-1
 
 The train and validation losses as well as language evaluation scores during the first $50,000$ iterations for each configuration are shown in \ref{fig:exp1}. 
 
-As can be inferred from figure \ref{fig:exp1}, regardless of the \gls{cnn}, Adam optimizer gives the fastest convergence rate; pure \gls{sgd} without momentum and weight decay gives the lowest convergence rate compared the other LSTM hidden sizes. In addition, the losses reach a ``plateau'' (approximately $2.5$) very quickly after about first $20,000$ iterations, which indicates that the chose learning rate is considerably good enough for this problem.  
+As can be inferred from figure \ref{fig:exp1}, regardless of the \gls{cnn}, Adam optimizer gives the fastest convergence rate; pure \gls{sgd} without momentum and weight decay gives the lowest convergence rate compared the other optimization methods. In addition, the losses reach a ``plateau'' (approximately $2.5$) very quickly after about first $20,000$ iterations, which indicates that the chose learning rate is considerably good enough for this problem.  
 
 Regarding the language evaluation scores on standard metrics, both Adam and RMSProp achieves superior results to SGD, with Adam performs slightly better. The BLEU-1 and METEOR scores for SGD is fluctuated, which reflects its lower convergence rate compared to Adam and RMSProp.
 
@@ -228,11 +228,9 @@ The BLEU, METEOR and CIDEr scores for this experiment are reported in Table \ref
 
 \textbf{Conclusion:} With both VGGNet and AlexNet as the CNN module of the model, Adam $\left( \eta = 5\mathrm{e}{-4}$; $\alpha = 0.8, \beta = 0.999, \epsilon = 1\mathrm{e}{-8} \right) $ gives the best results in terms of the model convergence rate. Hence, it will be used as the optimization method in the subsequent experiments.
 
-\subsection{Experiment 2: LSTM hidden size}
+\subsection{Experiment 2: LSTM Architecture}
 \subsubsection{Experimental setup}
-As studied in \cite{DBLP:journals/corr/GreffSKSS15}, beside the learning rate $\eta$, the hidden layer size $h$ is an important hyperparameter that affects the performance of \gls{lstm} network. As expected, larger networks perform better,
-however the required training time and the number of network's parameters are also considerably increased. As a result, the model might not be usable when it is deployed to different machines at the inference time even though inference is just forwarding the inputs to the model.
-
+As studied in \cite{DBLP:journals/corr/GreffSKSS15}, beside the learning rate $\eta$, the hidden layer size $h$ is an important hyperparameter that affects the performance of \gls{lstm} network. 
 This experiment is conducted to evaluate the effects of different hidden sizes $h$ to the captioning model so as to figure out a suitable one as a trade-off between the performance of the model and the required training time as well as the computational capability of machine used in inference phase.
 To this end, I consider three different values of $h$ that are largely used in researches of \gls{lstm}. %, specifically $h = \left\{ 256, 512, 1000\right\}$. 
 The learning rate is set to $\eta = 5\mathrm{e}{-4}$, and the optimization method is Adam.
@@ -252,5 +250,16 @@ The learning rate is set to $\eta = 5\mathrm{e}{-4}$, and the optimization metho
 	\caption[Comparison of $3$ LSTM hidden sizes]{Comparison of $3$ LSTM hidden sizes: $h \in \left\{ 256, 512, 1000 \right\}$ w.r.t training/validation losses and language evaluation score during the first $50,000$ training iterations}
 	\label{fig:exp2} % label should be placed immediately after \caption for cross-reference to work properly
 \end{figure}
-\subsection{Experiment 4: AlexNet vs VGGNet as visual feature extractor}
 
+The plots in Figure \ref{fig:exp2} show that all three LSTM hidden sizes result in the remarkably similar convergence rates, both training and validation losses converges quickly. Furthermore, as expected, larger networks perform better,
+however the required training time and the number of network's parameters are also considerably increased. As a result, the model might not be usable when it is deployed to different machines at the inference time even though inference is just forwarding the inputs to the model.
+
+// \textit{TODO: Perform experiments on different LSTM architecture }
+Another unexpected result of this experiment is that momentum affects neither performance nor training time in any significant way. ...
+These observations suggest that momentum does not offer substaintial benefits when training LSTMs with online stochastic gradient descent as it does with the case of \gls{cnn}. It may, however, be more important in the case of batch training in which the gradient is less noisy.
+
+\textbf{Conclusion:} In the context of this experiment, the differences of convergence rate and performance of the model are not significant amongst three hidden size values evaluated. Nonetheless, as predefined above, the ultimate goal of this experiment is not to point out the best model in some certain extents but to figure out the trade-offs between model's performance versus the feasibility of deploying that model to wide varieties of hardware infrastructure. To this end, the good choice is an LSTM with $h = 512$ and \texttt{tanh} nonlinearity for its forget gate.
+
+\subsection{Experiment 3: AlexNet vs VGGNet}
+
+\subsection{Experiment 4: Transfer learning}

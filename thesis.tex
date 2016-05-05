@@ -1,0 +1,39 @@
+%% =================== PREAMBLE ===================
+\include{Preamble/preamble}
+%% =============== End of PREAMBLE ================
+
+\begin{document}
+% \maketitle
+\frontmatter
+\include{Fronts/titlepage}
+\include{Fronts/requirements}
+\include{Fronts/vnabstract}
+\include{Fronts/abstract}
+\include{Fronts/acknowledgement}
+\fontsize{13}{16pt}\selectfont
+\tableofcontents
+\listoffigures
+\addcontentsline{toc}{chapter}{List of figures}
+\listoftables
+\addcontentsline{toc}{chapter}{List of tables}
+
+\mainmatter
+\include{Chapters/chapter1}
+\include{Chapters/chapter2}
+\include{Chapters/chapter3}
+\include{Chapters/chapter4}
+\include{Chapters/chapter5}
+
+\begin{appendices} % must be placed before \backmatter to prevent un-numbered appendices
+\include{Appendices/app1}
+\include{Appendices/app2}
+\include{Appendices/app3}
+\end{appendices}
+
+\backmatter
+\bibliographystyle{unsrt}
+\renewcommand{\bibname}{References}
+\bibliography{references}
+\addcontentsline{toc}{chapter}{References}
+
+\end{document}

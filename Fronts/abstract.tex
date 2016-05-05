@@ -1,0 +1,14 @@
+\begin{abstract}
+\nocite{Goodfellow-et-al-2016-Book}
+\indent Automatically describing the content of an image is a fundamental problem in artificial intelligent that connects computer vision and part of machine translation. A system that can generate sentences describing the content of given images have many emperical applications. Such a system can be used to help visually-impaired persons to have awareness of surrounding environment and can help them to navigate easilier. Another interesting application is to use that system to support image search engines. Instead of searching over hand-designed image features (which might take long time to extract and large storage), search engines can search in the generated descriptions of those images, which is faster and likely to produce results that are closer to user query's expectations. 
+
+
+In this thesis, I present the deep learning techniques that learn the visual representation of images along with their descriptions in English in order to automatically describe the content of any given image in natural sentences. Those techniques exploit recent advances in computer vision (e.g., convolutional neural networks) and neural probablistic language modeling (e.g., recurrent neural network).
+
+
+Intuitively, the image captioning model is composed of two modules. First, a Convolutional Neural Network encodes input image into a fixed-length vector representation. This vector is then fed into a Recurrent Neural Network which in turn decodes the representation into a sequence of words that describe the image. The model is trained by maximizing the likelihood of the target sentence given the input image and the previous generated words.
+
+
+Emperically, I conduct an extensive set of experiments to examine and evaluate different aspects of the model including the effectivenness of different visual feature extractors, optimization methods, hidden sizes of the recurrent network and transfer learning. In each experiment, I report the performance of the model with respect to standard metrics that are widely used in to evaluate image captioning and machine translation model. Based on such observation, I comparitvely suggest the suitable models as trade-offs between the performance, applicability and feasibility when deploying the model to commodity hardware.
+
+\end{abstract}

@@ -5,18 +5,26 @@
 
 This chapter presents the theoretical backgrounds in deep learning that act as foundation for all the models used in the thesis.
 The first section introduces the concept of artifical neuron (or \textit{neuron}) - building block of modern artifical neural networks - and its learning procedures and algorithms including \textit{stochastic gradient descent} and \textit{backpropagation}. The second section describes the architecture of Convolutional Neural Network (CNN) - the infamous type of network that has achieved astounishing performance on numerous computer vision tasks such as classification, detection, segmentation, etc. Another type of neural network - Recurrent Neural Network (RNN), which is powerful for many tasks in natural language processing domain - is presented in the third section. 
-\section{Artificial Neuron}
+
+There are four elements that are particularly important when considering any model of artificial neural networks:
+\begin{itemize}
+	\item[-] the structure of the nodes,
+	\item[-] the topology of the network,
+	\item[-] the objective function,
+	\item[-] the learning algorithm that is used to find the weights of the network and to minimize the objective function.
+\end{itemize}
+\section{Feed-forward Neural Networks}
+
+\subsection{Models of a neuron}
 
 \begin{wrapfigure}{r}{0.35\linewidth}
 	\vspace{-20pt} % reduce top space of the figure
-	\label{fig:neuron}
 	\centering
 	\includegraphics[scale=0.35]{Chapters/Fig/neuron.eps}
 	\caption{A single artificial neuron}
+	\label{fig:neuron}
 	\vspace{-25pt} % decrease bottom space of the figure
 \end{wrapfigure}
-
-\subsection{Notations and Terminologies}
 
 A neuron is a decisive device which takes several inputs and produces one ouput. Figure \ref{fig:neuron} depicts a neuron which takes three inputs and produces one ouput, where:
 \begin{itemize}[noitemsep]
@@ -57,18 +65,16 @@ There are several types of activation functions often used in deep neural networ
 	\label{fig:activation-function}
 \end{figure}
 
-\subsection{Learning with a single neuron}
-In general Machine Learning, the learning is the process to find out a hypothesis function $h\left(x\right)$ that best fits the test data set. It is often that the form of such function is chosen beforehand (e.g., linear, quadratic, etc.). 
-
-\textit{//TODO: rewrite}
-\section{Feed-forward Neural Network}
+\subsection{Feed-forward Neural Network}
 \begin{figure}
 	\centering
 	\includegraphics[width=0.75\linewidth]{Chapters/Fig/feedforward.eps}
-	\caption{A feed-forward neural network consisted of four layers: 1 input layer, 2 hidden layers and one output layer}
+	\caption[A typical feed-forfward network]{A typical feed-forfward network consisted of four layers: 1 input layer, 2 hidden layers and one output layer}
 	\label{fig:ff-net}
 \end{figure}
-Feed-forward neural networks (or \textit{Fully-connected neural networks}) are comprised of layers of neurons. Every neuron in $l$\textit{th} layer is connected to every neuron in $\left(l+1\right)$\textit{th} layer, but there are no connections between neurons within same layer nor connections between neurons in layer $\left(l+1\right)$ to neurons in layer $l$. Figure \ref{fig:ff-net} illustrates the architecture of a simple feed-forward neural network. There is a real-valued weight. Neuron $k$ in layer $l$ receives as input:
+Feed-forward neural networks (or \textit{Fully-connected neural networks}) are comprised of layers of neurons. Every neuron in $l$\textit{th} layer is connected to every neuron in $\left(l+1\right)$\textit{th} layer, but there are no connections between neurons within same layer nor connections between neurons in layer $\left(l+1\right)$ to neurons in layer $l$. Figure \ref{fig:ff-net} illustrates the architecture of a simple feed-forward neural network. The leftmost layer is the \textit{input layer}; the rightmost one is the \textit{output layer} which contains the output neurons. The ones between input and output layer are called the \textit{hidden layer}.
+
+ There is a real-valued weight. Neuron $k$ in layer $l$ receives as input:
 
 \begin{align*}
 	x^l_k = b^l_k + \sum^{N_{t-1}}_{i=1} w^{l-1}_{ik}y^{l-1}_i
@@ -99,8 +105,6 @@ where
 and $\displaystyle\frac{\partial E}{\partial y^L_k}$ is assumed to be readily computable. From this, derivatives with respect to all the weights and biases can be computed, working down from the top layer. This is know as the backpropagation algorithm. Typically, the gradient is averaged over a whole batch of images, and the the parameters are updated with this \textit{average gradient}. This is know as batch learning.
 
 \section{Convolutional Neural Network}
-\subsection{Overview}
-
 \subsection{Convolutional layer}
 
 \subsection{Nonlinear layer}
@@ -108,3 +112,81 @@ and $\displaystyle\frac{\partial E}{\partial y^L_k}$ is assumed to be readily co
 \subsection{Pooling layer}
 
 \section{Recurrent Neural Network}
+\subsection{Vanilla \gls{rnn}}
+
+\subsection{Long Short-term Memory}
+
+%% -------------------------------------
+%% SECTION 2:
+%%   Evaluation metrics
+%% -------------------------------------
+\section{Evaluation Metrics}
+\label{sec:chap4_metric}
+Even though there has not existed any clear methodology to decide whether a generated caption is deemed successful or not given an input images, researchers of image captioning and machine translation often use several methods to evaluate the quality of the captions. The most commonly used metric so far in the image caption literature has been the BLUE score \cite{Papineni:2002:BMA:1073083.1073135}. Though the metric has recently been critised due to some obvious drawbacks, it has been shown to correlate well with human evaluations. In addition, another scores which are also often used are METEOR and CIDer.
+
+\subsection{BLUE}
+Let \textit{c} be the length of the generated caption and \textit{r} be the length of the groundtruth caption in the dataset. The brevity penalty BP is computed as
+\begin{align}
+	BP &= \left\{
+		\begin{tabular}{l l}
+			1 & if $c > r$ \\
+			$e^{\left(1 - r/c\right)}$ & if $c \leq r$
+		\end{tabular}
+	\right.
+\end{align}
+Then,
+	\begin{align}
+		\centering
+		\text{BLUE} &= \text{BP} \cdot \text{exp} \left( \mathlarger{ \sum^N_{n=1} } w_n \text{log} p_n \right) 
+	\end{align}
+The ranking behavior is more immediately apparent in the log domain
+\begin{align*}
+	\text{log BLUE} &= \text{min} \left(1 - \frac{r}{c}, 0\right) + \mathlarger{\sum^N_{n=1}} w_n\text{log}p_n 
+\end{align*}
+
+
+\subsection{METEOR}
+In the context of image captioning, METEOR \cite{denkowski:lavie:meteor-wmt:2014} is a language specific translation evaluation method for any target language. It evaluates the generated caption by aligning it to the groundtruth sentence and calculating sentence-level similarity scores.
+The METEOR score for a sentence pair is calculated as follow:
+\begin{itemize}
+	\item Content and function words are identified in the hypothesis $\left(h_c, h_f\right)$ and reference $\left(r_c, r_f \right)$ according to a function word list
+
+	\item For each of the matchers $\left( m_i \right)$ count the number of content and function words covered by matches of this type in the hypothesis $\left(m_i\left(h_c\right), m_i\left(h_f\right)\right)$ and reference $\left(m_i\left(r_c\right), m_i\left(r_f\right) \right)$
+
+	\item Calculate weighted precision and recall using matcher weights $\left(w_i .s w_n\right)$ and content-function word weight $\left( \delta \right)$:
+	\begin{align}
+		P &= \frac{\sum_i w_i \cdot \left( \delta \cdot m_i\left(h_c\right) + \left(1 - \delta \right) \cdot m_i \left(h_f\right) \right)}{\delta \cdot |h_c| + \left( 1 - \delta \right) \cdot |h_f|} \\
+		R &= \frac{\sum_i w_i \cdot \left( \delta \cdot m_i\left(r_c\right) + \left(1 - \delta \right) \cdot m_i \left(r_f\right) \right)}{\delta \cdot |r_c| + \left( 1 - \delta \right) \cdot |r_f|}
+	\end{align}
+
+	\item Calculate the harmonic mean of $P$ and $R$:
+	\begin{align}
+		F_{\text{mean}} = \frac{P . R}{\alpha . P + \left( 1 - \alpha \right) . R}
+	\end{align}
+
+	\item To account for gaps and differences in word order, a fragmentation penalty is calculated using the total number of matched word ($m$, averaged over hypothesis and reference) and number of chunks $\left(ch\right)$:
+	\begin{align}
+		\text{Pen} = \gamma . \left( \frac{m}{ch} \right) ^ \beta
+	\end{align}
+
+	\item The METEOR score is then calculated:
+	\begin{align}
+		\centering
+		\text{METEOR} = \left(1 - \text{Pen} \right) . F_{\text{mean}}
+	\end{align}
+\end{itemize}
+
+
+\subsection{CIDEr}
+CIDEr (Consensus-Based Image Description Evaluation) \cite{DBLP:journals/corr/VedantamZP14a} is an novel paradigm for evaluating image captions using humn consensus. It automatically evaluate for image $I_i$ how well a candidate sentence $c_i$ matches the consensus of a set of image descriptions $S_i = \{s_{i1}, \dots, s_{im}\}$. Each sentence is presentation by a set of $n$-grams (typically $n \in \{1, 2, 3, 4\}$).
+
+To calculate CIDEr score, we first have to perform a Term Frequency Inverse Document Frequency (TF-IDF) weighting for each $n$-grams. We compute the TF-IDF weighting $g_k\left(s_{ij}\right)$ for each $n$-gram $\omega_k$ using
+\begin{align}
+	g_k\left(s_{ij}\right) = \frac{h_k\left(s_{ij}\right)}{\sum_{\omega_l \in \Omega} h_l \left(s_{ij}\right)} \log \left( \frac{|I|}{\sum_{I_p \in I} \min \left( 1, \sum_q h_k \left(s_{pq} \right)\right)}  \right)
+\end{align}
+Then, CIDEr score is calculated as:
+	\begin{align}
+		\centering
+		\text{CIDEr} \left( c_i, S_i \right) &= \mathlarger{\sum_{n=1}^N} w_n \text{CIDEr}_n\left( c_i, S_i \right)
+	\end{align}
+In practice, $w_n = 1/N$ where $N = 4$ yields the best results

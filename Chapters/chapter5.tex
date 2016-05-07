@@ -1,13 +1,89 @@
-\chapter{Conclusions and Future Work}
+\chapter{Experiments and Evaluations}
 
-\section{Conclusions}
-	\subsection{Thesis contributions}
-		The contribution of this thesis includes several aspects listed as below:
-		\begin{itemize}
-			\item[-] The implementation of an automated image caption generator made up of a deep convolutional neural network as a visual feature extractor and a long-short term memory for language modelling. The system is trained in a ``end-to-end'' fashion.
-			\item[-] The detailed comparison and analyses of different hyperparameters of the proposed system and their effects on training process as well as system's overall performances which are measured using standard metrics in image captioning community.
-			\item[-]
-		\end{itemize}
-	\subsection{Limitation}
-		\lipsum[3]
-\section{Future Work}
+This chapter presents details of the implementations, experiments and evaluations for the proposed models in previous chapter. Section \ref{sec:chap4_implementation} describes the architecture of training system written in Torch framework which was used to train all the models. Before going onto detailed experiments and evaluations, section \ref{sec:chap4_metric} provides explanation for the metrics used to evaluate models' performances includeng BLUE, METEOR and CIDEr scores. Subsequently, section \ref{sec:chap4_experiment} presents all the experiments along with evaluation and assessment for each of them.
+
+
+%% -------------------------------------
+%% SECTION 3:
+%%   Experimental Environment
+%% -------------------------------------
+\section{Experimental Environment}
+\label{sec:chap4_environment}
+
+\subsection{Hardware configurations}
+\label{sec:hardware}
+All models are trained with the hardware configurations as shown in table \ref{tab:hardware_configuration}:
+
+\begin{table}
+	\centering
+	\caption{Hardware configuration for training all models}	
+	\label{tab:hardware_configuration}
+	\begin{tabularx}{0.65\textwidth}{ll}
+		\toprule
+		CPU & 2 x Intel(R) Xeon(R) E5-2620v3 \\
+			& (6 cores, 15MB cache, 2.40GHz) \\
+		\midrule
+		Memory & 4 x 32 GB ECC Registered \\
+		\midrule 
+		GPU & 2 x nVidia Tesla K80 [GK210B], \\
+			& each with $2,496$ CUDA cores, \\
+			& $12$GB VRAM, 240 GB/s memory bandwidth \\
+		\midrule
+		Storage & 8 x 6TB SATA 7200RPM Enterprise \\
+		\bottomrule
+	\end{tabularx}
+\end{table}
+
+
+
+%% -------------------------------------
+%% SECTION 4:
+%%   Experiments
+%% -------------------------------------
+\section{Experiments and Evaluations}
+\label{sec:chap4_experiment}
+
+This section gives the details of all experiments that I have conducted to explore and evaluate different models as well as the effects of different hyperparameters to the models proposed in previous chapter. 
+
+% \subsection{Experiment 1: Determine the right learning rates}
+
+\subsection{Experiment 1: Test robot accuracy}
+\subsubsection{Experiment's purpose}
+
+\subsubsection{Experimental setup}
+\gls{sgd} have been extensively employed to train deep neural networks due to their ease in implementation and robustness for problems with a lot of training samples. This experiment examines the effects of different LSTM hidden sizes with respect to the training process as well as overall performance of the models.
+
+I pratically found that, for the proposed image captioning model, the following settings for optimization methods work relatively well:
+	\begin{itemize}
+		\item \textbf{SGD}: learning rate $\eta = 1\mathrm{e}{-2}$, no momentum, no weight decay
+		\item \textbf{RMSProp}: learning rate $\eta = 5\mathrm{e}{-4}$; $\alpha = 0.8, \epsilon = 1\mathrm{e}{-8}$
+	\end{itemize}
+
+\subsubsection{Experimental results and evaluations}
+
+The train and validation losses as well as language evaluation scores during the first $50,000$ iterations for each configuration are shown in \ref{fig:exp1}. 
+
+\textbf{Result statistic}
+\begin{table}
+	\centering
+	\begin{tabular}{llcccccc}
+		\toprule
+		Configuration & Optimizer & B-1 & B-2 & B-3 & B-4 & METEOR & CIDEr \\ \midrule
+		\multirow{3}{*}{\textit{Config-1}} & Adam & \textbf{62.9} & & & & 21.2 & \textbf{65.5} \\
+		 & RMSProp & 61.8 & & & & 19.7 & 62.4 \\
+		 & SGD & 55.5 & & & & 15.5 & 32.3 \\
+		 \midrule
+		 \multirow{3}{*}{\textit{Config-2}} & Adam & 61.5 & & & &\textbf{21.5} & 63.7 \\
+		 & RMSProp & 60.2 & & & & 18.9 & 61.2 \\
+		 & SGD & 53.1 & & & & 14.0 & 30.8 \\
+		 \bottomrule
+	\end{tabular}
+	\caption{Scores on the MSCOCO development set}
+	\label{tab:exp1}
+\end{table}
+
+[Some pictures here]
+
+\textbf{Conclusion:} With both VGGNet and AlexNet as the CNN module of the model, Adam gives the best results in terms of the model convergence rate. Hence, it will be used as the optimization method in the subsequent experiments.
+
+\subsection{Experiment 2: Set alarm}

@@ -1,22 +1,23 @@
 \chapter{Introduction}
 
 \section{Overview and Motivation}
-Understanding the world in a single glance is one of the most accomplished feats of the human brain: it takes only a few tens of miliseconds to recognize the category of an object or environment, emphasizing an important role of feedforward processing in visual recognition.
-A system that can automatically describe the content of natural images in natural sentences (e.g., English sentence) has many practical applications. For instance, such a system can be instrumental in helping visually impaired users navigate in different environments such as in supermarket or in a crowded road with many transportation vehicles as well as other pedestrians. Moreover, textual descriptions can provide a rich source of information from underlying image, which can be an excellent means of visual and semantic information for image search engines. Being able to generate descriptions for images, a search engine can analyse and process query mainly based on the descriptions and return the results in much shorter amount of time and more relevant to users query's expectations.
+- Automated Mobile App testing system: the goal is to develop mobile application testing system applying Robotics technology.
 
-At the same time, however, generating image descriptions poses many challenges as it not only requires the system to understand visual representation of the input image, the system also has to ``translate'' such representation into sequence of words that describes the image. A large body of work has been continously conducted on this problem and many different approaches have been proposed and evaluated with different criteria and by different metrics.
+- System's features
 
-...
+- Advantages of robotics testing: less invasive (does not require special software on phone), can be applied on new OS/phones...
 
-In this thesis, I describe an approach to this problem of generating image description based on recent advances in deep learning, specifically in computer vision and machine translation. Intuitively, the model presented in this thesis is comprised of a Convolutional Neural Network (\gls{cnn}) and a Long-Short Term Memory (LSTM) - the well-known variant of recurrent neural network. The CNN acts as an image encoder which ``encodes'' input image into a fixed-length vector representation. This vector is then fed into a LSTM module which ``decodes'' that representation into sequence of words.
+\section{System overview}
 
-\section{Related Work}
-	Recently, a large body of work has focused on the problem of generating novel descriptions for images. Those works have been made possible due to the availability of large and high-quality datasets, rapid development of computational resources and most importantly the advances in computer vision and machine translation baked by deep learning methods.
-	
-		\subsubsection{Convolutional neural network} 
-		Starting from LeNet-5 \cite{lecun-98}, \gls{cnn} has been applied to several tasks in computer vision. However, due to the limitation of available dataset as well as computational resources, the power of \gls{cnn} was underestimated. \cite{NIPS2012_4824} proposed a deep convolutional neural network - namely AlexNet - that achieved astonishing performance on ILSVRC 2012 \cite{ILSVRC15}. The recent trend is to increase the number of layers \cite{Simonyan14c}
-		
-		\subsubsection{Neural machine translation}
-		
-		\subsubsection{Image captioning}
-		A large body of work has addressed the problem of generating descriptions for a given image. Many approaches attack image captioning as a retrieval task. \cite{DBLP:journals/tacl/SocherKLMN14} proposed a dependency-tree recursive neural network (DT-RNN) model which uses dependency trees to embed sentences and image into a multi-modal embedding space, then the caption is retrieved by finding close-by sentence vector of the image-feature vector. \cite{Ordonez:2011:im2text} .\cite{Farhadi:2010:PTS:1888089.1888092} explores the image caption task by using detections to infer a triplet of scene elements which is converted to text using templates. Most of recent works on image caption are relied on combination of recent advances in computer vision and neural machine translation. \cite{DBLP:journals/corr/KarpathyF14} proposed an alignment model based on a novel \gls{cnn} \cite{Simonyan14c} over image regions and bidrectional recurrent neural networks over setneces to learn to generate descriptions for image regions. \cite{DBLP:journals/corr/LebretPC15, DBLP:journals/corr/FangGISDDGHMPZZ14, DBLP:journals/corr/DonahueHGRVSD14}
+\section{Work load}
+Hieu: build software modules
+Huong: design and manufacture the robot, develop controller module
+
+\section{Goals of this thesis}
+	\begin{itemize}
+		\item[--] To detect and recognize mobile phone screen's components
+		\item[--] To generate testing scripts
+		\item[--] To perform testing process on the robot
+	\end{itemize}
+
+\section{Outline of thesis}

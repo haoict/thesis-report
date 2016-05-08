@@ -1,18 +1,26 @@
 \chapter{Introduction}
 
-Automated testing has never been an outdated problem in mobile application developing process. There are over 2,500 manufacturer models and over 100 mobile operating system versions \cite{crittercism}. Daily developed mobile applications need to be tested in wide range of phone designs and platforms. These result in enormous amount of testing scenarios and require an effective industrial testing series. Current software-based testing method has shown some advantages but there are still some issues demanded to be dealt with.
+Automated testing has never been an outdated problem in mobile application developing process. There are over 2,500 manufacturer models and over 100 mobile operating system versions\cite{crittercism}. Daily developed mobile applications need to be tested in wide range of phone designs and platforms. These result in enormous amount of testing scenarios and require an effective industrial testing series. Current software-based testing method has shown some advantages but there are still some issues demanded to be dealt with.
 
 The problem of present testing method is that only software aspect is considered. Tester can run test cases perfectly in software regardless hardware's failure like button or touch screen malfunction. Otherwise, each phone operating system requires different corresponding testing framework. These factors conspire to make the cross-platform mobile application testing very challenging. \nocite{weinman_thesis}
 
 We propose a new approach that in its design, software and hardware testing are more integrated. Applying image processing technologies, our system can detect content of phone screen and produce actions on it. These actions are performed directly on target phone by delta robot. Robotics testing gives us a less invasive way of mobile testing that does not require special software on target phone. In addition, the testing series can be applied on any mobile phone operating systems without doubt.
 
 \section{System overview}
+The system overview and design are described below in Figure \ref{fig:sys_overview}
+	\begin{wrapfigure}{r}{0.35\linewidth}
+		\vspace{-20pt} % reduce top space of the figure
+		\centering
+		\includegraphics[scale=1]{Chapters/Fig/sys_overview.png}
+		\caption{System overview}
+		\label{fig:sys_overview}
+		\vspace{-25pt} % decrease bottom space of the figure
+	\end{wrapfigure}
 
-\subsection{Work load}
-Hieu: build software modules
-Huong: design and manufacture the robot, develop controller module
+In this thesis, I construct testing framework with screen reading modules. The robot which is designed and manufactured by my partner, \textit{Huong} Nguyen Tien, is commanded to perform the work test via Huong's robot controller module.
 
 \section{Goals of this thesis}
+In order to achieve desired testing framework, the mission is to complete following tasks:
 	\begin{itemize}
 		\item[--] To detect and recognize mobile phone screen's components
 		\item[--] To generate testing scripts

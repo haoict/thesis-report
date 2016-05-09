@@ -4,12 +4,71 @@ Understanding the meaning of phone screen requires to detect and recognize these
 In this chapter, basic objects in screen such as button, text and keyboard are covered.
 
 \section{Technique using for detection}
+\subsection{Edge detection}
+\subsubsection{Canny Edge Detection}
+The main purpose of edge detection is to obtain structure properties of the image with least data extracted for further image processing \cite{canny}. Among some algorithms existing, I choose the one developed by John F. Canny (JFC) in 1986 \cite{jfc_canny}. Known as \gls{ced} or optimal detector, Canny algorithm has three main advantages \cite{code_canny}:
+	\begin{itemize}
+		\item \textbf{Low error rate}: Meaning a good detection of only existent edges.
+		\item \textbf{Good localization}: The distance between edge pixels detected and real edge pixels have to be minimized.
+		\item \textbf{Minimal response}: Only one detector response per edge.
+	\end{itemize}
+
+\subsubsection{CED algorithm steps}
+\begin{itemize}
+	\item \textbf{Noise filter}: Using Gaussian filter \cite{gauss_filter}, a sample kernel of \textit{size = 5} might be shown as Equation \ref{eq:gauss}:
+	\begin{equation}
+		\label{eq:gauss}
+		B = \frac{1}{159} .
+		\left[ \begin{array}{ccccc}
+		2 & 4 & 5 & 4 & 2 \\
+		5 & 12 & 15 & 12 & 5 \\
+		4 & 9 & 12 & 9 & 4 \\
+		2 & 4 & 5 & 4 & 2
+		\end{array} \right]
+	\end{equation}
+
+	\item \textbf{Find the intensity gradient of the image}: Gradients at each pixel in the smoothed image are determined by applying Sobel-operator \cite{sobel_alg}
+
+	Apply a pair of convolution masks (in \textit{x} and \textit{y} directions:
+	\begin{equation}
+		\label{eq:gx_gy}
+		G_x =
+		\left[ \begin{array}{ccc}
+		-1 & 0 & 1 \\
+		-2 & 0 & 2 \\
+		-1 & 0 & 1
+		\end{array} \right]
+		\qquad
+		G_y =
+		\left[ \begin{array}{ccc}
+		1 & 2 & 1 \\
+		0 & 0 & 0 \\
+		-1 & -2 & -1
+		\end{array} \right]
+	\end{equation}
+
+	Find the gradient strength and direction with:
+	\begin{equation}
+		\label{eq:gradient}
+		G = \sqrt{G^2_x + G^2_y}
+	\end{equation}
+	\begin{equation}
+		\label{eq:direction}
+		\theta = arctan(\frac{G_y}{G_x})
+	\end{equation}
+	The direction is rounded to one of four possible angles (namely 0, 45, 90 or 135)
+
+	\item \textbf{Apply Non-maximum suppression}: Removing pixels that are not considered to be part of an edge.
+	\item \textbf{Double thresholding}: Potential edges are determined by thresholding.
+	\item \textbf{Edge tracking by hysteresis}: Final edges are determined by suppressing all edges that are not connected to a very certain (strong) edge.
+\end{itemize}
+
 \subsection{Shape detection}
-Canny Edge
 Detect object by shape (triangle, rectangle, oval)
 
 \subsection{Text detection and extraction}
 Morphological operation method
+Sobel edge detection algorithm
 
 \subsection{Optical Character Recognition}
 \gls{ocr}

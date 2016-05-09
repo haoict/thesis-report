@@ -5,8 +5,8 @@ In this chapter, basic objects in screen such as button, text and keyboard are c
 
 \section{Technique using for detection}
 \subsection{Edge detection}
-\subsubsection{Canny Edge Detection}
-The main purpose of edge detection is to obtain structure properties of the image with least data extracted for further image processing \cite{canny}. Among some algorithms existing, I choose the one developed by John F. Canny (JFC) in 1986 \cite{jfc_canny}. Known as \gls{ced} or optimal detector, Canny algorithm has three main advantages \cite{code_canny}:
+\subsubsection{\gls{ced}}
+The main purpose of edge detection is to obtain structure properties of the image with least data extracted for further image processing \cite{canny}. Among some algorithms existing, I choose the one developed by John F. Canny (JFC) \nocite{jfc_canny}. Known as Canny Edge detector or optimal detector, Canny algorithm has three main advantages \cite{code_canny}:
 	\begin{itemize}
 		\item \textbf{Low error rate}: Meaning a good detection of only existent edges.
 		\item \textbf{Good localization}: The distance between edge pixels detected and real edge pixels have to be minimized.
@@ -14,8 +14,9 @@ The main purpose of edge detection is to obtain structure properties of the imag
 	\end{itemize}
 
 \subsubsection{CED algorithm steps}
-\begin{itemize}
-	\item \textbf{Noise filter}: Using Gaussian filter \cite{gauss_filter}, a sample kernel of \textit{size = 5} might be shown as Equation \ref{eq:gauss}:
+\label{sec:ced_step}
+\begin{enumerate}
+	\item \textbf{Noise filter}: Using Gaussian filter \nocite{gauss_filter}, a sample kernel of \textit{size = 5} might be shown as Equation \ref{eq:gauss}:
 	\begin{equation}
 		\label{eq:gauss}
 		B = \frac{1}{159} .
@@ -61,14 +62,55 @@ The main purpose of edge detection is to obtain structure properties of the imag
 	\item \textbf{Apply Non-maximum suppression}: Removing pixels that are not considered to be part of an edge.
 	\item \textbf{Double thresholding}: Potential edges are determined by thresholding.
 	\item \textbf{Edge tracking by hysteresis}: Final edges are determined by suppressing all edges that are not connected to a very certain (strong) edge.
-\end{itemize}
+\end{enumerate}
 
 \subsection{Shape detection}
-Detect object by shape (triangle, rectangle, oval)
+The output of CED process in Section \ref{sec:ced_step} is calculated to decide whether image contains simple geometric shapes (such as triangles, rectangles, squares, pentagons) or not.
+
+For each edge, contour is retrieved for detecting process. Only contours with area greater than certain amount are considered. Practically, contours larger than 250 pixel are accepted.
+
+Next, shape of the contour is decided by its attributes. For example, if the contour has 3 vertices, it is a triangle. Correspondingly, a contour has 4 vertices which all the angles in the contour are from 80 to 100 degree is a rectangle.
 
 \subsection{Text detection and extraction}
-Morphological operation method
-Sobel edge detection algorithm
+Mobile phone screen is composed of much of text. Almost object in the screen has text with it. Text segmentation and recognition help the system to understanding the sense of the screen content.
+
+Our system aims at the automatic detection of text. This is done by the algorithm. Figure \ref{fig:flow_diagram_morph} shows the flow diagram of text detection algorithm. The algorithm steps are summarized as follows.
+
+\begin{enumerate}
+	\item An Sobel edge detection scheme is applied to the gray scale image. The image I is blurred (to reduce false edges and over-segmentation) using open-close and close-open filters.
+	The final blurred image Ib is the average of the outputs of these filters. The 3 x 3 8-connected structuring element of type ``square'' is used here.
+
+	Next, the morphological gradient operator is applied to the blurred image Ib resulting in an image G as follows:
+	\begin{center}
+	G = Dilation (Ib) – Erosion (Ib)
+	\end{center}
+
+	The Morphological gradient is an edge-strength extraction operator that gives symmetric edges between foreground and background regions.
+
+	The resulting image is then thresholded to obtain a binary edge image. Otsu and binary thresholding technique is used
+	for that. \nocite{otsu}
+
+	\item Closed edges in the binary edge image are grouped by dilation using eight- connected structuring elements.
+
+	Then small connected components in the dilated image are filtered using erosion. The output is a binary image
+	that contains text candidate regions.
+
+	\item Connected component labeling is performed to label each object separately.
+
+	\item After applying connected component labeling, the first set of criteria is applied which eliminate all objects whose area is greater than 10000 and filled area is greater than 8000.
+	One more criteria namely major axis length is used which is used to retain the text region alone.
+	All objects, whose major axis lengths are in between 20 to 3000, are considered to be text.
+	To eliminate small objects, connected component labeling is applied to the resultant image and the second set of criteria is applied which eliminates all the objects whose area is less than 300 and filled area is less than 500.
+\end{enumerate}
+
+After applying all these 4 steps, we get a filtered image that contains only text regions \cite{text_detect}.
+
+	\begin{figure}
+		\centering
+		\includegraphics{Chapters/Fig/flow_diagram_morph.png}
+		\caption{Flow diagram of Text Detection algorithm}
+		\label{fig:flow_diagram_morph}
+	\end{figure}
 
 \subsection{Optical Character Recognition}
 \gls{ocr}

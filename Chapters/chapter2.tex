@@ -80,7 +80,7 @@ Our system aims at the automatic detection of text. This is done by the algorith
 	\item An Sobel edge detection scheme is applied to the gray scale image. The image I is blurred (to reduce false edges and over-segmentation) using open-close and close-open filters.
 	The final blurred image Ib is the average of the outputs of these filters. The 3 x 3 8-connected structuring element of type ``square'' is used here.
 
-	Next, the morphological gradient operator is applied to the blurred image Ib resulting in an image G as follows:
+	Next, the morphological gradient operator \nocite{morph} is applied to the blurred image Ib resulting in an image G as follows:
 	\begin{center}
 	G = Dilation (Ib) – Erosion (Ib)
 	\end{center}
@@ -113,7 +113,8 @@ After applying all these 4 steps, we get a filtered image that contains only tex
 	\end{figure}
 
 \subsection{Optical Character Recognition}
-\gls{ocr}
-Using Tesseract
+By definition, \gls{ocr} is the process or technology of reading data in printed form by a device (optical character reader) that scans and identifies characters \cite{ocr_def}.
+
+Tesseract is an open-source OCR engine having comparative recognition accuracy. Originally developed by HP between 1984 and 1994, Tesseract became open-source in 2005 and is developed by Google since 2006 \cite{ocr_overview}. According to 1995 UNLV results, Tesseract can achieve accuracy up to 98\% on English newspaper \cite{Rice_thefourth}.
 
 \section{Recognition result}

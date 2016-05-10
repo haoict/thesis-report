@@ -6,13 +6,15 @@ This chapter describes the components that make up a testing script. At the end 
 \section{Testing script components}
 A testing script consists of one or more script actions. Each script action has following elements:
     \begin{itemize}
-		\item[--] \textbf{Source object}: element on the screen to be applied action on
-		\item[--] \textbf{Action}: what to do with source object
+		\item[--] \textbf{Source object}: element on the screen to be applied action on which is detected in Chapter \ref{ch:screen_recognize}
+		\item[--] \textbf{Action}: what to do with source object, will be covered in Section \ref{sec:actions}.
 		\item[--] \textbf{Execution time}: how long it takes to complete the action
 		\item[--] \textbf{Expected object} (optional, depended on each action): after finishing action, what expected to be display on the screen
 	\end{itemize}
 
 \subsection{Actions}
+\label{sec:actions}
+The robot is designed for physically contacting with the phone. It simulates human operations to perform testing process.
 There are 4 basic actions for robot to apply on mobile phone screen:
     \begin{itemize}
 		\item[--] \textbf{Click}: perform a quick single tap on screen
@@ -24,7 +26,7 @@ There are 4 basic actions for robot to apply on mobile phone screen:
 \subsection{States of system}
     \begin{figure}[H]
 		\centering
-		\includegraphics[scale=0.75]{Chapters/Fig/system_state.png}
+		\includegraphics[scale=0.7]{Chapters/Fig/system_state.png}
 		\caption{System state diagram}
 		\label{fig:system_state}
 	\end{figure}
@@ -41,9 +43,41 @@ There are 4 basic actions for robot to apply on mobile phone screen:
 \subsection{Implementation}
     \begin{figure}[H]
 		\centering
-		\includegraphics[scale=0.75]{Chapters/Fig/class_diagram.png}
+		\includegraphics[scale=0.55]{Chapters/Fig/class_diagram.png}
 		\caption{System class diagram}
 		\label{fig:class_diagram}
+	\end{figure}
+
+Main components of the system
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.75]{Chapters/Fig/main_class.png}
+		\caption{System main components}
+		\label{fig:main_class}
+	\end{figure}
+
+Script Generator structure
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.75]{Chapters/Fig/script_gen.png}
+		\caption{Script Generator structure}
+		\label{fig:script_gen}
+	\end{figure}
+
+Image Processor structure
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.75]{Chapters/Fig/img_processor.png}
+		\caption{Image Processor structure}
+		\label{fig:img_processor}
+	\end{figure}
+
+Action Generator structure
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.75]{Chapters/Fig/act_gen.png}
+		\caption{Action Generator structure}
+		\label{fig:act_gen}
 	\end{figure}
 
 \section{Testing script example}

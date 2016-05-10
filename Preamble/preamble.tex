@@ -90,7 +90,8 @@
 %% ================== ENVIRONMENTS ================== %%
 \newenvironment{requirement}
 {
-	\cleardoublepage
+	\newpage
+	\phantomsection
 	\thispagestyle{empty}
 	\addcontentsline{toc}{chapter}{Requirements for the thesis}
 	\vspace{-30pt}
@@ -105,7 +106,8 @@
 
 \newenvironment{acknowledgement}
 {
-	\cleardoublepage
+	\newpage
+	\phantomsection
 	\thispagestyle{empty}
 	\addcontentsline{toc}{chapter}{Acknowledgements}
 	\vspace{-30pt}
@@ -120,7 +122,8 @@
 
 \newenvironment{abstract}
 {
-	\cleardoublepage
+	\newpage
+	\phantomsection
 	\thispagestyle{empty}
 	\addcontentsline{toc}{chapter}{Abstract of thesis}
 	\vspace{-30pt}
@@ -135,7 +138,8 @@
 
 \newenvironment{vnabstract}
 {
-	\cleardoublepage
+	\newpage
+	\phantomsection
 	\thispagestyle{empty}
 	\selectlanguage{vietnamese} %% Must be presented here, or you will not be able
 							 %% to use Vietnamese in some pages in your thesis

@@ -66,6 +66,7 @@ The main purpose of edge detection is to obtain structure properties of the imag
 \end{enumerate}
 
 \subsection{Shape detection}
+\label{sec:shape_detect}
 The output of CED process in Section \ref{sec:ced_step} is calculated to decide whether image contains simple geometric shapes (such as triangles, rectangles, squares, pentagons) or not.
 
 For each edge, contour is retrieved for detecting process. Only contours with area greater than certain amount are considered. Practically, contours larger than 250 pixel are accepted.
@@ -73,6 +74,7 @@ For each edge, contour is retrieved for detecting process. Only contours with ar
 Next, shape of the contour is decided by its attributes. For example, if the contour has 3 vertices, it is a triangle. Correspondingly, a contour has 4 vertices which all the angles in the contour are from 80 to 100 degree is a rectangle.
 
 \subsection{Text detection and extraction}
+\label{sec:text_detect}
 Mobile phone screen is composed of much of text. Almost object in the screen has text with it. Text segmentation and recognition help the system to understanding the sense of the screen content.
 
 Our system aims at the automatic detection of text. This is done by the algorithm. Figure \ref{fig:flow_diagram_morph} shows the flow diagram of text detection algorithm. The algorithm steps are summarized as follows.
@@ -114,6 +116,7 @@ After applying all these 4 steps, we get a filtered image that contains only tex
 	\end{figure}
 
 \subsection{Optical Character Recognition}
+\label{sec:ocr}
 By definition, \gls{ocr} is the process or technology of reading data in printed form by a device (optical character reader) that scans and identifies characters \cite{ocr_def}.
 
 Tesseract is an open-source OCR engine having comparative recognition accuracy. Originally developed by HP between 1984 and 1994, Tesseract became open-source in 2005 and is developed by Google since 2006 \cite{ocr_overview}. According to 1995 UNLV results, Tesseract can achieve accuracy up to 98\% on English newspaper \cite{Rice_thefourth}.
@@ -128,3 +131,74 @@ Figure \ref{fig:tesseract_arch} briefly describes the architecture of Tesseract 
 	\end{figure}
 
 \section{Recognition result}
+
+\subsection{Button detection}
+Buttons are detected by shape using technique presented in Section \ref{sec:shape_detect}
+
+	\begin{figure}[H]
+	    \centering
+	    \subfigure{
+	        \centering
+	        \includegraphics[scale=0.5]{Chapters/Fig/rect_detect.png}
+	    }
+	    
+	    \subfigure{
+	        \centering
+	        \includegraphics[scale=0.5]{Chapters/Fig/rect_detect_2.png}
+	    }
+
+	    \caption{Button detection result}
+		\label{fig:btn_detect}
+	\end{figure}
+
+\subsection{Text detection}
+Text is detected and segmented by algorithm in Section \ref{sec:text_detect}
+
+	\begin{figure}[H]
+	    \centering
+	    \subfigure[Text detection in alarm home screen]{
+	        \includegraphics[scale=0.5]{Chapters/Fig/text_detect_home.png}
+	    }
+	    \qquad
+	    \subfigure[Text detection in alarm item screen]{
+	        \includegraphics[scale=0.5]{Chapters/Fig/text_detect_item.png}
+	    }
+	    \qquad
+	    \subfigure[Text detection in alarm time select screen]{
+	        \includegraphics[scale=0.5]{Chapters/Fig/text_detect_clock.png}
+	    }
+	    \qquad
+	    \caption{Text detection result}
+		\label{fig:text_detect}
+	\end{figure}
+
+\subsection{Keyboard detection}
+Keyboard consists of rectangle buttons. This feature shares the same detection method with Button detection.
+
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.5]{Chapters/Fig/kb_detect.png}
+		\caption{Keyboard detection result}
+		\label{fig:kb_detect}
+	\end{figure}
+
+\subsection{Optical Character Recognition}
+Text segments detected in previous section is used for recognizing process. After this stage, object will have a name given from recognized text and a relative location on the screen.
+
+	\begin{figure}[H]
+	    \centering
+	    \subfigure[Text recognition in alarm home screen]{
+	        \includegraphics[scale=0.5]{Chapters/Fig/found_home.png}
+	    }
+	    \qquad
+	    \subfigure[Text recognition in alarm item screen]{
+	        \includegraphics[scale=0.5]{Chapters/Fig/found_item.png}
+	    }
+	    \qquad
+	    \subfigure[Text recognition in alarm time select screen]{
+	        \includegraphics[scale=0.5]{Chapters/Fig/found_clock.png}
+	    }
+	    \qquad
+	    \caption{Text recognition result}
+		\label{fig:text_recognize}
+	\end{figure}

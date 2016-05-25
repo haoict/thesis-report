@@ -13,13 +13,13 @@
 \fancyhf{}
 \fancyhead[LE,RO]{\thechapter}
 \fancyhead[R]{\rightmark}
-\fancyfoot[L]{\textit{This thesis is performed by: \thesisAuthor -- \studentID -- \studentClass}}
+\fancyfoot[L]{\textit{This thesis is performed by: \thesisAuthor \space -- \studentID \space -- \studentClass}}
 \fancyfoot[R]{\thepage}
 
 \fancypagestyle{plain}{%
 	\fancyhead{}%
 	\renewcommand*{\headrule}{}%
-	\fancyfoot[L]{\textit{This thesis is performed by: \thesisAuthor -- \studentID -- \studentClass}}
+	\fancyfoot[L]{\textit{This thesis is performed by: \thesisAuthor \space -- \studentID \space -- \studentClass}}
 	\fancyfoot[R]{\thepage}%
 }
 
@@ -30,25 +30,27 @@
 \usepackage{graphicx}
 
 \usepackage{tabularx}
+\usepackage{array}
 \usepackage{booktabs}
 % \usepackage[usenames, dvipsnames]{color}
 \usepackage{wrapfig} % For positioning figure
 
 \usepackage{float}
-
+\usepackage{lscape}
 % For subfigures
 \usepackage{subfigure}
 \usepackage{caption}
-
+\usepackage{listings}
 \usepackage{times}
 \usepackage{lipsum} % For dummy lorem ipsum texts
 \usepackage{enumitem}
 \usepackage{multirow}
 \usepackage{hyperref}
-
 % For formatting subsubsection
 \usepackage{titlesec}
-\titleformat{\subsubsection}{\normalfont\scshape}{\thesection}{1em}{} % Capitalize the subsubsection title
+\titleformat{\paragraph}{\normalfont\scshape}{}{1em}{} % Capitalize the subsubsection title
+%\titleformat{\subsubsection}{\normalfont\scshape}{\thesection}{1em}{} % Capitalize the subsubsection title
+\setcounter{secnumdepth}{4}
 
 % Vietnamese input
 \usepackage[utf8]{inputenc}
@@ -92,7 +94,7 @@
 {
 	\newpage
 	\phantomsection
-	\thispagestyle{empty}
+	\thispagestyle{plain}
 	\addcontentsline{toc}{chapter}{Requirements for the thesis}
 	\vspace{-30pt}
 	% \null
@@ -108,7 +110,7 @@
 {
 	\newpage
 	\phantomsection
-	\thispagestyle{empty}
+	\thispagestyle{plain}
 	\addcontentsline{toc}{chapter}{Acknowledgements}
 	\vspace{-30pt}
 	% \null
@@ -124,7 +126,7 @@
 {
 	\newpage
 	\phantomsection
-	\thispagestyle{empty}
+	\thispagestyle{plain}
 	\addcontentsline{toc}{chapter}{Abstract of thesis}
 	\vspace{-30pt}
 	% \null
@@ -140,7 +142,7 @@
 {
 	\newpage
 	\phantomsection
-	\thispagestyle{empty}
+	\thispagestyle{plain}
 	\selectlanguage{vietnamese} %% Must be presented here, or you will not be able
 							 %% to use Vietnamese in some pages in your thesis
 	\addcontentsline{toc}{chapter}{Tóm tắt nội dung đồ án tốt nghiệp}
@@ -156,6 +158,6 @@
 {\vfill\null}
 %% ================ End ENVIRONMENTS ================ %%
 
-\usepackage{glossaries} % should be loaded at the end (or at least after
-% packages: hyperref, babel, inputenc)
+\usepackage[acronym, toc]{glossaries}
+\makeglossaries
 \loadglsentries{\PreamblePath/glossaries}
